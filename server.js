@@ -1,9 +1,31 @@
 const express = require('express');//import express
+const mongodb = require('mongodb');
 const app = express();
-const port = 3000;
+app.use(express.json());
+
+const MongoClient = mongodb.MongoClient;//initialize the connection
+
+const connectionURL = 'mongodb://127.0.0.1:27017';
+const databaseName = 'Articles';
 
 app.post('/create',(req,res) => {
-    console.log('create');
+    MongoClient.connect(connectionURL,{useNewUrlParser: true, useUnifiedTopology: true},(error,client) =>{
+        if(error){
+            res.status(500).send('database error');
+        }
+        const db = client.db(databaseName);//connect to specific database
+
+        db.collection('Article').insertOne({
+            article_heading : req.body.heading,//add data
+            article_body : req.body.body
+        }, (error,result) => {
+            if(error) {
+                res.status(500).send('error');
+            } if(result){
+                res.status(201).send('created');
+            }
+        })
+    })
 });
 
 app.get('/read',(req,res) => {
@@ -18,6 +40,6 @@ app.delete('/delete', (req, res) => {
     console.log('delete');
 });
 
-app.listen(port, () => {
+app.listen(4000, () => {
     console.log('App listening on port 3000!');
 });
