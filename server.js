@@ -29,7 +29,20 @@ app.post('/create',(req,res) => {
 });
 
 app.get('/read',(req,res) => {
-    console.log('read');
+    MongoClient.connect(connectionURL,{useNewUrlParser: true, useUnifiedTopology: true},(error,client) =>{
+        if(error){
+            res.status(500).send('database error');
+        }
+        const db = client.db(databaseName);//connect to specific database
+
+        db.collection('Article').find({}, (error,result) => {
+            if(error) {
+                res.status(500).send('error');
+            } if(result){
+                console.log(result);
+            }
+        })
+    })
 });
 
 app.put('/update', (req, res) => {
