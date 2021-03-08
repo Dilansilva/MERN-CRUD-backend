@@ -46,7 +46,7 @@ app.get('/read',(req,res) => {
 });
 
 app.put('/update', (req, res) => {
-    console.log('update');
+    
 });
 
 app.delete('/delete', (req, res) => {
