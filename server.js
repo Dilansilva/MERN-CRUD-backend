@@ -46,11 +46,24 @@ app.get('/read',(req,res) => {
 });
 
 app.put('/update', (req, res) => {
-    
+    MongoClient.connect(connectionURL,{useNewUrlParser: true, useUnifiedTopology: true},(error,client) =>{
+        if(error){
+            res.status(500).send('database error');
+        }
+        const db = client.db(databaseName);//connect to specific database
+
+        db.collection('Article').findOneAndUpdate({}, (error,result) => {
+            if(error) {
+                res.status(500).send('error');
+            } if(result){
+                console.log(result);
+            }
+        })
+    })
 });
 
 app.delete('/delete', (req, res) => {
-    console.log('delete');
+    
 });
 
 app.listen(4000, () => {
