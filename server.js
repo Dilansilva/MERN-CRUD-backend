@@ -12,7 +12,6 @@ const connectionURL = 'mongodb://127.0.0.1:27017';
 const databaseName = 'Articles';
 
 app.post('/create',(req,res) => {
-    console.log(req.body);
     MongoClient.connect(connectionURL,{useNewUrlParser: true, useUnifiedTopology: true},(error,client) =>{
         if(error){
             res.status(500).send('database error');
