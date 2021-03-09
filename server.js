@@ -1,7 +1,10 @@
 const express = require('express');//import express
 const mongodb = require('mongodb');
 const app = express();
+var cors = require('cors');//import cors
+
 app.use(express.json());
+app.use(cors());//enable all cors
 
 const MongoClient = mongodb.MongoClient;//initialize the connection
 
@@ -80,6 +83,6 @@ app.delete('/delete', (req, res) => {
     })
 });
 
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log('App listening on port 3000!');
 });
