@@ -12,9 +12,12 @@ const connectionURL = 'mongodb://127.0.0.1:27017';
 const databaseName = 'Articles';
 
 app.post('/create',(req,res) => {
+    
     MongoClient.connect(connectionURL,{useNewUrlParser: true, useUnifiedTopology: true},(error,client) =>{
         if(error){
-            res.status(500).send('database error');
+            res.status(500).send({
+                message : "Database Error"
+            });
         }
         const db = client.db(databaseName);//connect to specific database
 
@@ -23,9 +26,13 @@ app.post('/create',(req,res) => {
             article_body : req.body.body
         }, (error,result) => {
             if(error) {
-                res.status(500).send('error');
+                res.status(500).send({
+                    message : "unable to create"
+                });
             } if(result){
-                res.status(201).send('created');
+                res.status(201).send({
+                    message : "created"
+                });
             }
         })
     })
@@ -38,12 +45,9 @@ app.get('/read',(req,res) => {
         }
         const db = client.db(databaseName);//connect to specific database
 
-        db.collection('Article').find({}, (error,result) => {
-            if(error) {
-                res.status(500).send('error');
-            } if(result){
-                console.log(result);
-            }
+        db.collection('Article').find({}).toArray(function(err,result) {
+            if(err) throw err;
+            res.send(result);
         })
     })
 });
@@ -83,5 +87,5 @@ app.delete('/delete', (req, res) => {
 });
 
 app.listen(4000, () => {
-    console.log('App listening on port 3000!');
+    console.log('App listening on port 4000!');
 });
